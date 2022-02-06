@@ -1,0 +1,137 @@
+package cl.code;
+
+import java.util.Scanner;
+
+/**
+ * @date 2022/1/17
+ */
+public class GoGame {
+    static class User {
+        // 当前得分
+        private int score = 0;
+        // 用户名称
+        private String name;
+        // 出拳
+        private String quan;
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getQuan() {
+            return quan;
+        }
+
+        // 数字转换手型
+        public void setQuan(int quan) {
+
+            if (quan==0) {
+                this.quan = "グー";
+            }
+            else if (quan==1) {
+                this.quan = "チョキ";
+            }
+            else if (quan==2) {
+                this.quan = "パー";
+            }else {
+                System.out.println("入力が間違いがあり、ゲームは終了しました。\n");
+            }
+        }
+    }
+    static class Ai {
+        // 当前得分
+        private int score = 0;
+        // 当前出拳
+        private int change;
+        // 出拳
+        private String quan;
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        // 生成随机数，并赋值对应手型
+        public int getChange() {
+
+            int aiquan = (int)(Math.random()*3);
+            if (aiquan==0) {
+                this.quan = "グー";
+            }
+            if (aiquan==1) {
+                this.quan = "チョキ";
+            }
+            if (aiquan==2) {
+                this.quan = "パー";
+            }
+            return  aiquan;
+        }
+
+        // 获取当前手型
+        public String getQuan() {
+            return quan;
+        }
+    }
+    // 1チョキ   2グー   3パー
+    public static void main(String[] args) {
+        Ai ai = new Ai();
+        User user = new User();
+//        System.out.println(ai.getChange());
+        System.out.println("-------------じゃんけんゲーム----開始！---------------");
+        System.out.println("0を押していればゲームは始めます！！");
+        // 用户输入
+        Scanner input = new Scanner(System.in);
+        if (input.nextInt()==0){
+            System.out.println("名前を入力してください：\n");
+            user.setName(input.next());
+            System.out.println("名前は："+user.getName()+"\n ゲームを始めます \n");
+
+            while (true){
+                System.out.println("じゃんけんーポ！（ルール：0はグー 1はチョキ 2はパーで、0,1,2を選択し、入力してください）\n");
+                int chuquan = input.nextInt();
+                int change = ai.getChange();
+                user.setQuan(chuquan);
+                // 输入错误，退出游戏
+                if (chuquan!=1&&chuquan!=2&&chuquan!=0){
+                    break;
+                }
+                if (chuquan==change){
+                    System.out.println("パソコン："+ai.getQuan()+"   "+user.getName()+":"+user.getQuan());
+                    System.out.println("引き分け\n");
+                }else if((change + 1) % 3 == chuquan) {
+                    System.out.println("パソコン："+ai.getQuan()+"   "+user.getName()+":"+user.getQuan());
+                    System.out.println("パソコンが勝ち");
+                    ai.setScore(ai.getScore()+1);
+                } else {
+                    System.out.println("パソコン："+ai.getQuan()+"   "+user.getName()+":"+user.getQuan());
+                    System.out.println(user.getName()+"が勝ち");
+                    user.setScore(user.getScore()+1);
+                }
+                System.out.println("もう一回遊びますか。(任意のキーを入力してゲームは続きます，0を入力したらゲームは終わります)");
+                if (input.nextInt()==0){
+                    System.out.println("パソコンの得点："+ai.getScore()+"\n");
+                    System.out.println(user.getName()+"の得点："+user.getScore()+"\n");
+                    System.out.println("ゲーム終了");
+                    break;
+                }
+            }
+
+        }
+
+    }
+}
